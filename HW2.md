@@ -98,7 +98,7 @@ However, the SA algorithm is not suitable for the optimization problem since the
 
 ### Code Availability
 
-The code is available on [GitHub](
+The code is available at [https://github.com/bughht/MRI_System_Design](https://github.com/bughht/MRI_System_Design)
 
 ## Results
 
