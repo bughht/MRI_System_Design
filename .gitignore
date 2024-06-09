@@ -1,0 +1,5 @@
+data
+*.mat
+*.asv
+*.txt
+.ipynb_checkpoints
