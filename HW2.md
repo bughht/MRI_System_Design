@@ -130,7 +130,7 @@ The standard deviation loss function shows the least effective performance among
 |System Shim| 3.283| 148.547| 0.188| 35.300%|
 |Active Shim L2 norm| 3.269| 133.122| 0.168| 42.018%|
 |Active Shim L1 norm| 3.297| 144.780| 0.182| 36.941%|
-|Active Shim Std norm| 3.201| 239.135| 0.166| -4.155%|
+|Active Shim Std| 3.201| 239.135| 0.166| -4.155%|
 
 ## Conclusion
 
