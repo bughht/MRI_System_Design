@@ -40,8 +40,17 @@ disp(sprintf("norm1(B0_shim) = %f\n", norm(B0_shim,1)));
 disp(sprintf("max(B0_no_shim) = %f,\t min(B0_no_shim) = %f\n", max(B0_no_shim), min(B0_no_shim)));
 disp(sprintf("max(B0_shim) = %f,\t min(B0_shim) = %f\n", max(B0_shim), min(B0_shim)));
 
+tStart = cputime;
+field_basis = cal_Bz_Biotsavart_HHT(X',Y',Z',ones(29,1), data_coil_trace);
+execute_time = cputime - tStart
+disp(size(field_basis));
+
+% f = @(c) norm(field_basis*c'+B0_no_shim',2);
+% f = @(c) norm(field_basis*c'+B0_no_shim',1);
+f = @(c) std(field_basis*c'+B0_no_shim');
+
 % f = @(c) std(sum(cal_Bz_Biotsavart_HHT(X',Y',Z',c, data_coil_trace),2)+B0_no_shim',2);
-f = @(c) norm(sum(cal_Bz_Biotsavart_HHT(X',Y',Z',c, data_coil_trace),2)+B0_no_shim',2);
+% f = @(c) norm(sum(cal_Bz_Biotsavart_HHT(X',Y',Z',c, data_coil_trace),2)+B0_no_shim',2);
 % f = @(c) norm(sum(cal_Bz_Biotsavart_HHT(X',Y',Z',c, data_coil_trace),2)+B0_no_shim',1);
 % % c0 = 0.5*(rand(29,1)-0.5);
 % c0 = load("particleswarm_results.mat","c").c;
@@ -56,21 +65,17 @@ f = @(c) norm(sum(cal_Bz_Biotsavart_HHT(X',Y',Z',c, data_coil_trace),2)+B0_no_sh
 % disp(sprintf("std(f0) = %f\n", std(f0)));
 % disp(sprintf("max(f0) = %f,\t min(f0) = %f\n", max(f0), min(f0)));
 
-lb = -3*ones(29,1);
-ub = 3*ones(29,1);
+lb = -3*ones(1,29);
+ub = 3*ones(1,29);
 
 % options = optimset('Display','iter','PlotFcns',@optimplotfval );
 % [x,fval,exitflag,output] = fminsearch(f,c0,options);
 
 
-% options = optimoptions('fminunc','Display','iter','PlotFcn', 'optimplotx' ,'Algorithm','quasi-newton');
-% [x,fval,exitflag,output] = fminunc(f,c0,options)
-
-
 % options = optimoptions('simulannealbnd','PlotFcns', {@saplotbestx,@saplotbestf,@saplotx,@saplotf},'Display','iter','ReannealInterval',200);
 % [c,fval,exitflag,output] = simulannealbnd(f,c0,lb,ub,options)
 
-options = optimoptions('particleswarm','SwarmSize',10,'UseParallel',false,'Display','iter','PlotFcns',@pswplotbestf,'InitialSwarmMatrix',zeros(10,29));
+options = optimoptions('particleswarm','SwarmSize',500,'UseParallel',true,'UseVectorized',false,'Display','iter','PlotFcns',@pswplotbestf,'InitialSwarmMatrix',zeros(500,29),'OutputFcn',@pswplotbestf);
 [c,fval,exitflag,output,points] = particleswarm(f,29,lb,ub,options)
 
 % c = optimvar("x",29,1);
